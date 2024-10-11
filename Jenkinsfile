@@ -13,7 +13,7 @@ pipeline {
                 script {
                     // Step 2: Build a new Docker image from the latest code
                     // Use --no-cache to avoid caching issues
-                    sh 'docker build --no-cache -t ajinkya_app .'
+                    sh 'docker build --no-cache -t ajinkya_apps .'
                 }
             }
         }
