@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 // Step 1: Pull the latest code from the repository
-                git branch: 'master', url: 'https://github.com/hshar/website.git'
+                git branch: 'master', url: 'https://github.com/Ajinkyapatil1234/website.git'
             }
         }
         stage('Build Docker Image') {
