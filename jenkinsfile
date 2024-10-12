@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                // Step 1: Clone the repository (master branch by default)
+                git branch: 'master', url: 'https://github.com/Ajinkyapatil1234/website.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Step 2: Build the Docker image from the Dockerfile in the repo
+                    sh 'docker build -t myapp .'
+                }
+            }
+        }
+
+        stage('Stop Old Container') {
+            steps {
+                script {
+                    // Step 3: Stop and remove any running containers using the old image
+                    sh 'docker stop $(docker ps -q --filter "ancestor=myapp") || true'
+                    sh 'docker rm $(docker ps -a -q --filter "ancestor=myapp") || true'
+                }
+            }
+        }
+
+        stage('Run New Container') {
+            steps {
+                script {
+                    // Step 4: Run a new container from the freshly built image, map to port 82
+                    sh 'docker run -d -p 82:80 --name myapp-container myapp'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up dangling Docker images to free up space
+            sh 'docker rmi $(docker images -f "dangling=true" -q) || true'
+        }
+    }
+}
