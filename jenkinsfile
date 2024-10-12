@@ -20,7 +20,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    CONTAINER_ID=$(docker ps -q --filter ancestor=website-app)
+                    CONTAINER_ID=$(docker ps -q --filter ancestor=myapp)
                     if [ ! -z "$CONTAINER_ID" ]; then
                         docker stop $CONTAINER_ID
                         docker rm $CONTAINER_ID
