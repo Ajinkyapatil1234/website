@@ -8,7 +8,6 @@ pipeline {
         }
         stage('Build') {
             steps {
-                // Use sudo to elevate permissions
                 sh 'sudo apt-get update'
                 sh 'sudo DEBIAN_FRONTEND=noninteractive apt-get install -y apache2'
                 sh 'sudo cp -R * /var/www/html/'
@@ -19,6 +18,8 @@ pipeline {
                 sh 'echo $PATH'
                 sh 'which docker'
                 sh 'docker --version'
+                // Remove existing container if it exists
+                sh 'sudo /usr/bin/docker rm -f webapp-container || true'
                 sh 'sudo /usr/bin/docker run -d -p 82:80 --name webapp-container ubuntu:latest'
             }
         }
