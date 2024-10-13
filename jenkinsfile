@@ -14,16 +14,8 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'apt-get update'
-                sh 'apt-get install -y apache2'
+                sh 'DEBIAN_FRONTEND=noninteractive apt-get install -y apache2'
                 sh 'cp -R * /var/www/html/'
-            }
-        }
-        stage('Debug Info') {
-            steps {
-                sh 'whoami'
-                sh 'which docker'
-                sh 'docker --version'
-                sh 'ls -l /usr/bin/docker'
             }
         }
         stage('Run Container') {
@@ -51,4 +43,5 @@ pipeline {
         }
     }
 }
+
 
