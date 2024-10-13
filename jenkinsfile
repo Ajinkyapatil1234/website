@@ -21,7 +21,9 @@ pipeline {
         stage('Run Container') {
             steps {
                 script {
-                    docker.image('ubuntu:latest').run('-d -p 82:80 --name webapp-container')
+                    docker.image('ubuntu:latest').inside('-u root:root') {
+                        sh 'docker run -d -p 82:80 --name webapp-container ubuntu:latest'
+                    }
                 }
             }
         }
@@ -41,4 +43,3 @@ pipeline {
         }
     }
 }
-
