@@ -8,9 +8,10 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'apt-get update'
-                sh 'DEBIAN_FRONTEND=noninteractive apt-get install -y apache2'
-                sh 'cp -R * /var/www/html/'
+                // Use sudo to elevate permissions
+                sh 'sudo apt-get update'
+                sh 'sudo DEBIAN_FRONTEND=noninteractive apt-get install -y apache2'
+                sh 'sudo cp -R * /var/www/html/'
             }
         }
         stage('Run Container') {
@@ -18,7 +19,7 @@ pipeline {
                 sh 'echo $PATH'
                 sh 'which docker'
                 sh 'docker --version'
-                sh '/usr/bin/docker run -d -p 82:80 --name webapp-container ubuntu:latest'
+                sh 'sudo /usr/bin/docker run -d -p 82:80 --name webapp-container ubuntu:latest'
             }
         }
         stage('Publish') {
@@ -26,8 +27,8 @@ pipeline {
                 branch 'master'
             }
             steps {
-                sh 'service apache2 start'
-                sh 'cp -R * /var/www/html/'
+                sh 'sudo service apache2 start'
+                sh 'sudo cp -R * /var/www/html/'
             }
         }
     }
