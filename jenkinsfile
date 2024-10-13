@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'develop', url: 'https://github.com/Ajinkyapatil1234/website.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'sudo apt-get update'
+                sh 'sudo DEBIAN_FRONTEND=noninteractive apt-get install -y apache2'
+                sh 'sudo cp -R * /var/www/html/'
+            }
+        }
+        // No Publish stage for develop branch
+    }
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
