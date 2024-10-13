@@ -1,0 +1,38 @@
+pipeline {
+    agent {
+        docker {
+            image 'ubuntu:latest'
+        }
+    }
+    environment {
+        DOCKER_IMAGE = 'ubuntu:latest'
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'master', url: 'https://github.com/Ajinkyapatil1234/website.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'apt-get update'
+                sh 'apt-get install -y apache2'
+                sh 'cp -R * /var/www/html/'
+            }
+        }
+        stage('Publish') {
+            when {
+                branch 'master'
+            }
+            steps {
+                sh 'service apache2 start'
+                sh 'cp -R * /var/www/html/'
+            }
+        }
+    }
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
