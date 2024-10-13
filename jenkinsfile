@@ -20,7 +20,7 @@ pipeline {
                 sh 'docker --version'
                 // Remove existing container if it exists
                 sh 'sudo /usr/bin/docker rm -f webapp-container || true'
-                sh 'sudo /usr/bin/docker run -d -p 82:80 --name webapp-container ubuntu:latest'
+                sh 'sudo /usr/bin/docker run -d -p 82:80 --name webapp-container webapp'
             }
         }
         stage('Publish') {
@@ -39,5 +39,6 @@ pipeline {
         }
     }
 }
+
 
 
