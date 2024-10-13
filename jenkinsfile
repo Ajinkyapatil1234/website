@@ -15,8 +15,9 @@ pipeline {
         }
         stage('Run Container') {
             steps {
-                // Explicitly define Docker path
-                sh '/usr/bin/docker pull ubuntu:latest'
+                sh 'echo $PATH'
+                sh 'which docker'
+                sh 'docker --version'
                 sh '/usr/bin/docker run -d -p 82:80 --name webapp-container ubuntu:latest'
             }
         }
