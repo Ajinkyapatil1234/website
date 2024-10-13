@@ -18,6 +18,12 @@ pipeline {
                 sh 'cp -R * /var/www/html/'
             }
         }
+        stage('Debug Docker') {
+            steps {
+                sh 'which docker'
+                sh 'docker --version'
+            }
+        }
         stage('Run Container') {
             steps {
                 script {
