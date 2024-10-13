@@ -20,6 +20,7 @@ pipeline {
         }
         stage('Debug Docker') {
             steps {
+                sh 'echo $PATH'
                 sh 'which docker'
                 sh 'docker --version'
             }
@@ -27,9 +28,7 @@ pipeline {
         stage('Run Container') {
             steps {
                 script {
-                    docker.image('ubuntu:latest').inside('-u root:root') {
-                        sh '/usr/bin/docker run -d -p 82:80 --name webapp-container ubuntu:latest'
-                    }
+                    sh '/usr/bin/docker run -d -p 82:80 --name webapp-container ubuntu:latest'
                 }
             }
         }
