@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'ubuntu:latest'
-            args '-u root:root'
-        }
-    }
+    agent any
     stages {
         stage('Checkout') {
             steps {
@@ -18,18 +13,11 @@ pipeline {
                 sh 'cp -R * /var/www/html/'
             }
         }
-        stage('Debug Docker') {
-            steps {
-                sh 'echo $PATH'
-                sh 'which docker'
-                sh 'docker --version'
-            }
-        }
         stage('Run Container') {
             steps {
-                script {
-                    sh '/usr/bin/docker run -d -p 82:80 --name webapp-container ubuntu:latest'
-                }
+                // Explicitly define Docker path
+                sh '/usr/bin/docker pull ubuntu:latest'
+                sh '/usr/bin/docker run -d -p 82:80 --name webapp-container ubuntu:latest'
             }
         }
         stage('Publish') {
