@@ -2,10 +2,8 @@ pipeline {
     agent {
         docker {
             image 'ubuntu:latest'
+            args '-u root:root' // Run as root user
         }
-    }
-    environment {
-        DOCKER_IMAGE = 'ubuntu:latest'
     }
     stages {
         stage('Checkout') {
@@ -36,3 +34,4 @@ pipeline {
         }
     }
 }
+
