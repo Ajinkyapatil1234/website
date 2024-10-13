@@ -6,11 +6,11 @@ pipeline {
                 git branch: 'master', url: 'https://github.com/Ajinkyapatil1234/website.git'
             }
         }
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
                 sh 'sudo apt-get update'
-                sh 'sudo DEBIAN_FRONTEND=noninteractive apt-get install -y apache2'
-                sh 'sudo cp -R * /var/www/html/'
+                sh 'sudo DEBIAN_FRONTEND=noninteractive apt-get install -y docker.io'
+                sh 'sudo docker build -t webapp .'
             }
         }
         stage('Run Container') {
