@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'ubuntu:latest'
-            args '-u root:root' // Run as root user
+            args '-u root:root'
         }
     }
     stages {
@@ -16,6 +16,13 @@ pipeline {
                 sh 'apt-get update'
                 sh 'apt-get install -y apache2'
                 sh 'cp -R * /var/www/html/'
+            }
+        }
+        stage('Run Container') {
+            steps {
+                script {
+                    docker.image('ubuntu:latest').run('-d -p 82:80 --name webapp-container')
+                }
             }
         }
         stage('Publish') {
