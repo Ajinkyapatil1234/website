@@ -16,4 +16,5 @@ spec:
       - name: production-app
         image: ajinkyadoc1234/production-app:latest
         ports:
-        - containerPort: 80
+        - containerPort: 85
+
