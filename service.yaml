@@ -3,10 +3,11 @@ kind: Service
 metadata:
   name: production-app-service
 spec:
+  type: NodePort
+  ports:
+  - port: 85
+    targetPort: 85
+    nodePort: 30085
   selector:
     app: production-app
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-  type: NodePort
+
