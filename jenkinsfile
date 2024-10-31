@@ -20,13 +20,13 @@ pipeline {
         stage('Pre-cleanup') {
             steps {
                 echo 'Cleaning up target directory on Worker 1...'
-                sh 'sudo rm -rf /path/to/your/project/website/target'
+                sh 'rm -rf /path/to/your/project/website/target'
             }
         }
         stage('Build JAR File') {
             steps {
                 echo 'Building JAR file on Worker 1...'
-                sh 'cd /path/to/your/project/website && sudo mvn clean package'
+                sh 'cd /path/to/your/project/website && mvn clean package'
             }
         }
         stage('Build Docker Image') {
@@ -90,5 +90,6 @@ pipeline {
         }
     }
 }
+
 
 
