@@ -17,12 +17,6 @@ pipeline {
                 git url: "${REPO_URL}"
             }
         }
-        stage('Pre-cleanup') {
-            steps {
-                echo 'Cleaning up target directory on Worker 1...'
-                sh 'rm -rf /path/to/your/project/website/target'
-            }
-        }
         stage('Build JAR File') {
             steps {
                 echo 'Building JAR file on Worker 1...'
