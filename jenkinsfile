@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -5,7 +6,7 @@ pipeline {
         REPO_URL = 'https://github.com/Ajinkyapatil1234/website.git'
         DOCKER_IMAGE = 'ajinkyadoc1234/production-app:2.0'
         K8S_NAMESPACE = 'default'
-        WORKER_DOCKER = 'ubuntu@<Worker-1-IP>'
+        WORKER_DOCKER = 'ubuntu@35.154.243.6'
     }
 
     stages {
