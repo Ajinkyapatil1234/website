@@ -23,7 +23,7 @@ pipeline {
                     steps {
                         echo 'Building Docker image on Worker 2...'
                         sshagent (credentials: ['id_rsa']) {
-                            sh "ssh ${WORKER_DOCKER_1} 'cd /path/to/your/project && docker build -t ${DOCKER_IMAGE} .'"
+                            sh "ssh ${WORKER_DOCKER_1} 'cd /path/to/your/project/website && docker build -t ${DOCKER_IMAGE} .'"
                         }
                     }
                 }
@@ -31,7 +31,7 @@ pipeline {
                     steps {
                         echo 'Building Docker image on Worker 3...'
                         sshagent (credentials: ['id_rsa']) {
-                            sh "ssh ${WORKER_DOCKER_2} 'cd /path/to/your/project && docker build -t ${DOCKER_IMAGE} .'"
+                            sh "ssh ${WORKER_DOCKER_2} 'cd /path/to/your/project/website && docker build -t ${DOCKER_IMAGE} .'"
                         }
                     }
                 }
@@ -39,7 +39,7 @@ pipeline {
                     steps {
                         echo 'Building Docker image on Worker 4...'
                         sshagent (credentials: ['id_rsa']) {
-                            sh "ssh ${WORKER_DOCKER_3} 'cd /path/to/your/project && docker build -t ${DOCKER_IMAGE} .'"
+                            sh "ssh ${WORKER_DOCKER_3} 'cd /path/to/your/project/website && docker build -t ${DOCKER_IMAGE} .'"
                         }
                     }
                 }
