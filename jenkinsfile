@@ -5,9 +5,7 @@ pipeline {
         REPO_URL = 'https://github.com/Ajinkyapatil1234/website.git'
         DOCKER_IMAGE = 'ajinkyadoc1234/production-app:2.0'
         K8S_NAMESPACE = 'default'
-        WORKER_DOCKER_1 = 'ubuntu@3.110.29.183'
-        WORKER_DOCKER_2 = 'ubuntu@13.201.2.100'
-        WORKER_DOCKER_3 = 'ubuntu@13.234.32.114'
+        WORKER_DOCKER = 'ubuntu@<Worker-1-IP>'
     }
 
     stages {
@@ -18,30 +16,10 @@ pipeline {
             }
         }
         stage('Build Docker Image') {
-            parallel {
-                stage('Worker 2') {
-                    steps {
-                        echo 'Building Docker image on Worker 2...'
-                        sshagent (credentials: ['id_rsa']) {
-                            sh "ssh ${WORKER_DOCKER_1} 'cd /path/to/your/project/website && docker build -t ${DOCKER_IMAGE} .'"
-                        }
-                    }
-                }
-                stage('Worker 3') {
-                    steps {
-                        echo 'Building Docker image on Worker 3...'
-                        sshagent (credentials: ['id_rsa']) {
-                            sh "ssh ${WORKER_DOCKER_2} 'cd /path/to/your/project/website && docker build -t ${DOCKER_IMAGE} .'"
-                        }
-                    }
-                }
-                stage('Worker 4') {
-                    steps {
-                        echo 'Building Docker image on Worker 4...'
-                        sshagent (credentials: ['id_rsa']) {
-                            sh "ssh ${WORKER_DOCKER_3} 'cd /path/to/your/project/website && docker build -t ${DOCKER_IMAGE} .'"
-                        }
-                    }
+            steps {
+                echo 'Building Docker image on Worker 1...'
+                sshagent (credentials: ['id_rsa']) {
+                    sh "ssh ${WORKER_DOCKER} 'cd /path/to/your/project/website && docker build -t ${DOCKER_IMAGE} .'"
                 }
             }
         }
@@ -49,7 +27,7 @@ pipeline {
             steps {
                 echo 'Pushing Docker image...'
                 sshagent (credentials: ['id_rsa']) {
-                    sh "ssh ${WORKER_DOCKER_1} 'docker push ${DOCKER_IMAGE}'"
+                    sh "ssh ${WORKER_DOCKER} 'docker push ${DOCKER_IMAGE}'"
                 }
             }
         }
