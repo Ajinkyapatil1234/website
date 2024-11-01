@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: production-app
-        image: ajinkyadoc1234/production-app:3.0
+        image: ajinkyadoc1234/production-app:4.0
         ports:
         - containerPort: 8080
         env:
