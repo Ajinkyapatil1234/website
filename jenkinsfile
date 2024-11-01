@@ -19,8 +19,7 @@ pipeline {
         }
         stage('Build JAR File') {
             steps {
-                echo 'Building JAR file on Worker 1...'
-                sh 'cd /path/to/your/project/website && mvn clean package'
+                echo 'Skipping JAR build; using prebuilt Docker image...'
             }
         }
         stage('Build Docker Image') {
