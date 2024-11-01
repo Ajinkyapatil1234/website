@@ -2,8 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: production-app-deployment
+  namespace: default
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: production-app
@@ -14,6 +15,10 @@ spec:
     spec:
       containers:
       - name: production-app
-        image: ajinkyadoc1234/production-app:2.0
+        image: ajinkyadoc1234/production-app:3.0
         ports:
-        - containerPort: 85
+        - containerPort: 8080
+        env:
+        - name: ENV_VAR_EXAMPLE
+          value: "value"
+
