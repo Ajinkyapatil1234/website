@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         REPO_URL = 'https://github.com/Ajinkyapatil1234/website.git'
-        DOCKER_IMAGE = 'ajinkyadoc1234/production-app:4.0'
+        DOCKER_IMAGE = 'ajinkyadoc1234/production-apps:4.0'
         K8S_NAMESPACE = 'default'
         WORKER_2 = 'ubuntu@3.110.29.183'
         WORKER_3 = 'ubuntu@13.201.2.100'
