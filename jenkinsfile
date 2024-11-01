@@ -23,50 +23,58 @@ pipeline {
             }
         }
         stage('Build Docker Image') {
-            parallel {
-                stage('Worker 2') {
-                    steps {
-                        echo 'Building Docker image on Worker 2...'
-                        sshagent (credentials: ['id_rsa']) {
-                            sh "ssh ${WORKER_DOCKER_2} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} .'"
-                        }
-                    }
-                }
-                stage('Worker 3') {
-                    steps {
-                        echo 'Building Docker image on Worker 3...'
-                        sshagent (credentials: ['id_rsa']) {
-                            sh "ssh ${WORKER_DOCKER_3} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} .'"
-                        }
-                    }
-                }
-                stage('Worker 4') {
-                    steps {
-                        echo 'Building Docker image on Worker 4...'
-                        sshagent (credentials: ['id_rsa']) {
-                            sh "ssh ${WORKER_DOCKER_4} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} .'"
-                        }
-                    }
-                }
+            steps {
+                echo 'Building Docker image on Worker 1...'
+                sh "docker build -t ${DOCKER_IMAGE} -f /path/to/your/project/website/Dockerfile /path/to/your/project/website"
             }
         }
         stage('Push Docker Image') {
             steps {
-                echo 'Pushing Docker image from Worker 2...'
-                sshagent (credentials: ['id_rsa']) {
-                    sh "ssh ${WORKER_DOCKER_2} 'docker push ${DOCKER_IMAGE}'"
-                }
+                echo 'Pushing Docker image from Worker 1...'
+                sh "docker push ${DOCKER_IMAGE}"
             }
         }
         stage('Deploy to Kubernetes') {
-            steps {
-                echo 'Deploying to Kubernetes from Worker 2...'
-                sh """
-                ssh ${WORKER_DOCKER_2} 'kubectl apply -f /home/ubuntu/website/deployment.yaml'
-                ssh ${WORKER_DOCKER_2} 'kubectl apply -f /home/ubuntu/website/service.yaml'
-                ssh ${WORKER_DOCKER_2} 'kubectl set image deployment/production-app-deployment production-app=${DOCKER_IMAGE} --namespace=${K8S_NAMESPACE}'
-                ssh ${WORKER_DOCKER_2} 'kubectl rollout status deployment/production-app-deployment --namespace=${K8S_NAMESPACE}'
-                """
+            parallel {
+                stage('Deploy on Worker 2') {
+                    steps {
+                        echo 'Deploying to Kubernetes on Worker 2...'
+                        sshagent (credentials: ['id_rsa']) {
+                            sh """
+                            ssh ${WORKER_DOCKER_2} 'kubectl apply -f /path/to/your/project/website/deployment.yaml'
+                            ssh ${WORKER_DOCKER_2} 'kubectl apply -f /path/to/your/project/website/service.yaml'
+                            ssh ${WORKER_DOCKER_2} 'kubectl set image deployment/production-app-deployment production-app=${DOCKER_IMAGE} --namespace=${K8S_NAMESPACE}'
+                            ssh ${WORKER_DOCKER_2} 'kubectl rollout status deployment/production-app-deployment --namespace=${K8S_NAMESPACE}'
+                            """
+                        }
+                    }
+                }
+                stage('Deploy on Worker 3') {
+                    steps {
+                        echo 'Deploying to Kubernetes on Worker 3...'
+                        sshagent (credentials: ['id_rsa']) {
+                            sh """
+                            ssh ${WORKER_DOCKER_3} 'kubectl apply -f /path/to/your/project/website/deployment.yaml'
+                            ssh ${WORKER_DOCKER_3} 'kubectl apply -f /path/to/your/project/website/service.yaml'
+                            ssh ${WORKER_DOCKER_3} 'kubectl set image deployment/production-app-deployment production-app=${DOCKER_IMAGE} --namespace=${K8S_NAMESPACE}'
+                            ssh ${WORKER_DOCKER_3} 'kubectl rollout status deployment/production-app-deployment --namespace=${K8S_NAMESPACE}'
+                            """
+                        }
+                    }
+                }
+                stage('Deploy on Worker 4') {
+                    steps {
+                        echo 'Deploying to Kubernetes on Worker 4...'
+                        sshagent (credentials: ['id_rsa']) {
+                            sh """
+                            ssh ${WORKER_DOCKER_4} 'kubectl apply -f /path/to/your/project/website/deployment.yaml'
+                            ssh ${WORKER_DOCKER_4} 'kubectl apply -f /path/to/your/project/website/service.yaml'
+                            ssh ${WORKER_DOCKER_4} 'kubectl set image deployment/production-app-deployment production-app=${DOCKER_IMAGE} --namespace=${K8S_NAMESPACE}'
+                            ssh ${WORKER_DOCKER_4} 'kubectl rollout status deployment/production-app-deployment --namespace=${K8S_NAMESPACE}'
+                            """
+                        }
+                    }
+                }
             }
         }
     }
@@ -80,6 +88,7 @@ pipeline {
         }
     }
 }
+
 
 
 
