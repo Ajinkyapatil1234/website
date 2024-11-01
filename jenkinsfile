@@ -29,7 +29,8 @@ pipeline {
                         echo 'Building Docker image on Worker 2...'
                         sshagent (credentials: ['id_rsa']) {
                             sh "scp -r /path/to/your/project/website ubuntu@3.110.29.183:/home/ubuntu/"
-                            sh "ssh ${WORKER_2} 'docker build -t ${DOCKER_IMAGE} -f /home/ubuntu/website/Dockerfile /home/ubuntu/website --no-cache'"
+                            sh "ssh ${WORKER_2} 'ls /home/ubuntu/website/target'"
+                            sh "ssh ${WORKER_2} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'"
                         }
                     }
                 }
@@ -38,7 +39,8 @@ pipeline {
                         echo 'Building Docker image on Worker 3...'
                         sshagent (credentials: ['id_rsa']) {
                             sh "scp -r /path/to/your/project/website ubuntu@13.201.2.100:/home/ubuntu/"
-                            sh "ssh ${WORKER_3} 'docker build -t ${DOCKER_IMAGE} -f /home/ubuntu/website/Dockerfile /home/ubuntu/website --no-cache'"
+                            sh "ssh ${WORKER_3} 'ls /home/ubuntu/website/target'"
+                            sh "ssh ${WORKER_3} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'"
                         }
                     }
                 }
@@ -47,7 +49,8 @@ pipeline {
                         echo 'Building Docker image on Worker 4...'
                         sshagent (credentials: ['id_rsa']) {
                             sh "scp -r /path/to/your/project/website ubuntu@13.234.32.114:/home/ubuntu/"
-                            sh "ssh ${WORKER_4} 'docker build -t ${DOCKER_IMAGE} -f /home/ubuntu/website/Dockerfile /home/ubuntu/website --no-cache'"
+                            sh "ssh ${WORKER_4} 'ls /home/ubuntu/website/target'"
+                            sh "ssh ${WORKER_4} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'"
                         }
                     }
                 }
