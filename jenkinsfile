@@ -28,7 +28,7 @@ pipeline {
                     steps {
                         echo 'Building Docker image on Worker 2...'
                         sshagent (credentials: ['id_rsa']) {
-                            sh "ssh ${WORKER_DOCKER_2} 'cd /home/ubuntu && docker build -t ${DOCKER_IMAGE} .'"
+                            sh "ssh ${WORKER_DOCKER_2} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} .'"
                         }
                     }
                 }
@@ -36,7 +36,7 @@ pipeline {
                     steps {
                         echo 'Building Docker image on Worker 3...'
                         sshagent (credentials: ['id_rsa']) {
-                            sh "ssh ${WORKER_DOCKER_3} 'cd /home/ubuntu && docker build -t ${DOCKER_IMAGE} .'"
+                            sh "ssh ${WORKER_DOCKER_3} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} .'"
                         }
                     }
                 }
@@ -44,7 +44,7 @@ pipeline {
                     steps {
                         echo 'Building Docker image on Worker 4...'
                         sshagent (credentials: ['id_rsa']) {
-                            sh "ssh ${WORKER_DOCKER_4} 'cd /home/ubuntu && docker build -t ${DOCKER_IMAGE} .'"
+                            sh "ssh ${WORKER_DOCKER_4} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} .'"
                         }
                     }
                 }
@@ -62,8 +62,8 @@ pipeline {
             steps {
                 echo 'Deploying to Kubernetes from Worker 2...'
                 sh """
-                ssh ${WORKER_DOCKER_2} 'kubectl apply -f /path/to/your/project/website/deployment.yaml'
-                ssh ${WORKER_DOCKER_2} 'kubectl apply -f /path/to/your/project/website/service.yaml'
+                ssh ${WORKER_DOCKER_2} 'kubectl apply -f /home/ubuntu/website/deployment.yaml'
+                ssh ${WORKER_DOCKER_2} 'kubectl apply -f /home/ubuntu/website/service.yaml'
                 ssh ${WORKER_DOCKER_2} 'kubectl set image deployment/production-app-deployment production-app=${DOCKER_IMAGE} --namespace=${K8S_NAMESPACE}'
                 ssh ${WORKER_DOCKER_2} 'kubectl rollout status deployment/production-app-deployment --namespace=${K8S_NAMESPACE}'
                 """
@@ -80,6 +80,7 @@ pipeline {
         }
     }
 }
+
 
 
 
