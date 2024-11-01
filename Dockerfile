@@ -5,7 +5,7 @@ FROM openjdk:11-jre-slim
 WORKDIR /app
 
 # Copy the application's jar file into the container at /app
-COPY target/your-app.jar app.jar
+COPY target/your-app-1.0-SNAPSHOT.jar app.jar
 
 # Run the application
 ENTRYPOINT ["java","-jar","/app.jar"]
