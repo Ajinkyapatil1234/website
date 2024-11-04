@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
       - name: production-app
-        image: ajinkyadoc1234/production-apps:4.0
+        image: ajinkyadoc1234/production-apps-new:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
 
