@@ -36,7 +36,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.example.MainClass</mainClass> <!-- Update this with your actual main class -->
+                            <mainClass>com.example.YourMainClass</mainClass> <!-- Update this with your actual main class -->
                         </manifest>
                     </archive>
                 </configuration>
@@ -44,3 +44,4 @@
         </plugins>
     </build>
 </project>
+
