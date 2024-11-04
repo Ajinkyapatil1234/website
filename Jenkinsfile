@@ -5,9 +5,9 @@ pipeline {
         REPO_URL = 'https://github.com/Ajinkyapatil1234/website.git'
         DOCKER_IMAGE = 'ajinkyadoc1234/production-apps:4.0'
         K8S_NAMESPACE = 'default'
-        WORKER_2 = 'ubuntu@3.110.29.183'
-        WORKER_3 = 'ubuntu@13.201.2.100'
-        WORKER_4 = 'ubuntu@13.234.32.114'
+        WORKER_2 = 'ubuntu@13.127.235.22'
+        WORKER_3 = 'ubuntu@13.200.243.170'
+        WORKER_4 = 'ubuntu@3.109.200.240'
     }
 
     stages {
@@ -28,7 +28,7 @@ pipeline {
                     steps {
                         echo 'Building Docker image on Worker 2...'
                         sshagent (credentials: ['id_rsa']) {
-                            sh "scp -r /path/to/your/project/website ubuntu@3.110.29.183:/home/ubuntu/"
+                            sh "scp -r /path/to/your/project/website ubuntu@13.127.235.22:/home/ubuntu/"
                             sh "ssh ${WORKER_2} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'"
                         }
                     }
@@ -37,7 +37,7 @@ pipeline {
                     steps {
                         echo 'Building Docker image on Worker 3...'
                         sshagent (credentials: ['id_rsa']) {
-                            sh "scp -r /path/to/your/project/website ubuntu@13.201.2.100:/home/ubuntu/"
+                            sh "scp -r /path/to/your/project/website ubuntu@13.200.243.170:/home/ubuntu/"
                             sh "ssh ${WORKER_3} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'"
                         }
                     }
@@ -46,7 +46,7 @@ pipeline {
                     steps {
                         echo 'Building Docker image on Worker 4...'
                         sshagent (credentials: ['id_rsa']) {
-                            sh "scp -r /path/to/your/project/website ubuntu@13.234.32.114:/home/ubuntu/"
+                            sh "scp -r /path/to/your/project/website ubuntu@3.109.200.240:/home/ubuntu/"
                             sh "ssh ${WORKER_4} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'"
                         }
                     }
