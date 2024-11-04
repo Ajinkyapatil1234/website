@@ -3,11 +3,11 @@ kind: Service
 metadata:
   name: production-app-service
 spec:
-  type: NodePort
-  ports:
-  - port: 80
-    targetPort: 8080
-    nodePort: 30008
   selector:
     app: production-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
 
