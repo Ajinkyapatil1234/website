@@ -8,6 +8,7 @@ pipeline {
         WORKER_2 = 'ubuntu@13.127.235.22'
         WORKER_3 = 'ubuntu@13.200.243.170'
         WORKER_4 = 'ubuntu@3.109.200.240'
+        PROJECT_PATH = '/var/lib/jenkins/workspace/Project2'
     }
 
     stages {
@@ -27,7 +28,7 @@ pipeline {
                             mkdir -p ~/.ssh
                             chmod 700 ~/.ssh
                             ssh-keyscan -H 13.127.235.22 >> ~/.ssh/known_hosts
-                            scp -o StrictHostKeyChecking=no -r /path/to/your/project/website ${WORKER_2}:/home/ubuntu/
+                            scp -o StrictHostKeyChecking=no -r ${PROJECT_PATH} ${WORKER_2}:/home/ubuntu/
                             ssh -o StrictHostKeyChecking=no ${WORKER_2} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'
                             """
                         }
@@ -41,7 +42,7 @@ pipeline {
                             mkdir -p ~/.ssh
                             chmod 700 ~/.ssh
                             ssh-keyscan -H 13.200.243.170 >> ~/.ssh/known_hosts
-                            scp -o StrictHostKeyChecking=no -r /path/to/your/project/website ${WORKER_3}:/home/ubuntu/
+                            scp -o StrictHostKeyChecking=no -r ${PROJECT_PATH} ${WORKER_3}:/home/ubuntu/
                             ssh -o StrictHostKeyChecking=no ${WORKER_3} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'
                             """
                         }
@@ -55,7 +56,7 @@ pipeline {
                             mkdir -p ~/.ssh
                             chmod 700 ~/.ssh
                             ssh-keyscan -H 3.109.200.240 >> ~/.ssh/known_hosts
-                            scp -o StrictHostKeyChecking=no -r /path/to/your/project/website ${WORKER_4}:/home/ubuntu/
+                            scp -o StrictHostKeyChecking=no -r ${PROJECT_PATH} ${WORKER_4}:/home/ubuntu/
                             ssh -o StrictHostKeyChecking=no ${WORKER_4} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'
                             """
                         }
@@ -95,6 +96,7 @@ pipeline {
         }
     }
 }
+
 
 
 
