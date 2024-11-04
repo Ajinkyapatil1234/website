@@ -24,6 +24,8 @@ pipeline {
                         echo 'Building Docker image on Worker 2...'
                         sshagent (credentials: ['jenkins-ssh-key']) {
                             sh """
+                            mkdir -p ~/.ssh
+                            chmod 700 ~/.ssh
                             ssh-keyscan -H 13.127.235.22 >> ~/.ssh/known_hosts
                             scp -o StrictHostKeyChecking=no -r /path/to/your/project/website ${WORKER_2}:/home/ubuntu/
                             ssh -o StrictHostKeyChecking=no ${WORKER_2} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'
@@ -36,6 +38,8 @@ pipeline {
                         echo 'Building Docker image on Worker 3...'
                         sshagent (credentials: ['jenkins-ssh-key']) {
                             sh """
+                            mkdir -p ~/.ssh
+                            chmod 700 ~/.ssh
                             ssh-keyscan -H 13.200.243.170 >> ~/.ssh/known_hosts
                             scp -o StrictHostKeyChecking=no -r /path/to/your/project/website ${WORKER_3}:/home/ubuntu/
                             ssh -o StrictHostKeyChecking=no ${WORKER_3} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'
@@ -48,6 +52,8 @@ pipeline {
                         echo 'Building Docker image on Worker 4...'
                         sshagent (credentials: ['jenkins-ssh-key']) {
                             sh """
+                            mkdir -p ~/.ssh
+                            chmod 700 ~/.ssh
                             ssh-keyscan -H 3.109.200.240 >> ~/.ssh/known_hosts
                             scp -o StrictHostKeyChecking=no -r /path/to/your/project/website ${WORKER_4}:/home/ubuntu/
                             ssh -o StrictHostKeyChecking=no ${WORKER_4} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'
@@ -89,6 +95,7 @@ pipeline {
         }
     }
 }
+
 
 
 
