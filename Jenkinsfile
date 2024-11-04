@@ -18,12 +18,6 @@ pipeline {
                 git url: "${REPO_URL}"
             }
         }
-        stage('Build Application') {
-            steps {
-                echo 'Building application...'
-                sh 'cd ${PROJECT_PATH} && mvn clean package'
-            }
-        }
         stage('Build Docker Image') {
             parallel {
                 stage('Worker 2') {
@@ -108,6 +102,7 @@ pipeline {
         }
     }
 }
+
 
 
 
