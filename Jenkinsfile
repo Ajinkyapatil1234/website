@@ -28,7 +28,8 @@ pipeline {
                             mkdir -p ~/.ssh
                             chmod 700 ~/.ssh
                             ssh-keyscan -H 13.127.235.22 >> ~/.ssh/known_hosts
-                            scp -o StrictHostKeyChecking=no -r ${PROJECT_PATH} ${WORKER_2}:/home/ubuntu/
+                            ssh ${WORKER_2} 'mkdir -p /home/ubuntu/website'
+                            scp -o StrictHostKeyChecking=no -r ${PROJECT_PATH}/* ${WORKER_2}:/home/ubuntu/website/
                             ssh -o StrictHostKeyChecking=no ${WORKER_2} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'
                             """
                         }
@@ -42,7 +43,8 @@ pipeline {
                             mkdir -p ~/.ssh
                             chmod 700 ~/.ssh
                             ssh-keyscan -H 13.200.243.170 >> ~/.ssh/known_hosts
-                            scp -o StrictHostKeyChecking=no -r ${PROJECT_PATH} ${WORKER_3}:/home/ubuntu/
+                            ssh ${WORKER_3} 'mkdir -p /home/ubuntu/website'
+                            scp -o StrictHostKeyChecking=no -r ${PROJECT_PATH}/* ${WORKER_3}:/home/ubuntu/website/
                             ssh -o StrictHostKeyChecking=no ${WORKER_3} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'
                             """
                         }
@@ -56,7 +58,8 @@ pipeline {
                             mkdir -p ~/.ssh
                             chmod 700 ~/.ssh
                             ssh-keyscan -H 3.109.200.240 >> ~/.ssh/known_hosts
-                            scp -o StrictHostKeyChecking=no -r ${PROJECT_PATH} ${WORKER_4}:/home/ubuntu/
+                            ssh ${WORKER_4} 'mkdir -p /home/ubuntu/website'
+                            scp -o StrictHostKeyChecking=no -r ${PROJECT_PATH}/* ${WORKER_4}:/home/ubuntu/website/
                             ssh -o StrictHostKeyChecking=no ${WORKER_4} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'
                             """
                         }
@@ -96,6 +99,7 @@ pipeline {
         }
     }
 }
+
 
 
 
