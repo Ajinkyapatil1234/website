@@ -77,7 +77,10 @@ pipeline {
             steps {
                 echo 'Pushing Docker image from Worker 2...'
                 sshagent (credentials: ['jenkins-ssh-key']) {
-                    sh "ssh -o StrictHostKeyChecking=no ${WORKER_2} 'docker push ${DOCKER_IMAGE}'"
+                    sh """
+                    ssh -o StrictHostKeyChecking=no ${WORKER_2} 'docker login -u ajinkyadoc1234 -p Ajinkya1234#'
+                    ssh -o StrictHostKeyChecking=no ${WORKER_2} 'docker push ${DOCKER_IMAGE}'
+                    """
                 }
             }
         }
@@ -88,8 +91,8 @@ pipeline {
                     sh """
                     ssh -o StrictHostKeyChecking=no ${WORKER_2} 'kubectl apply -f /home/ubuntu/website/deployment.yaml'
                     ssh -o StrictHostKeyChecking=no ${WORKER_2} 'kubectl apply -f /home/ubuntu/website/service.yaml'
-                    ssh -o StrictHostKeyChecking=no ${WORKER_2} 'kubectl set image deployment/production-app-deployment production-app=${DOCKER_IMAGE} --namespace=${K8S_NAMESPACE}'
-                    ssh -o StrictHostKeyChecking=no ${WORKER_2} 'kubectl rollout status deployment/production-app-deployment --namespace=${K8S_NAMESPACE}'
+                    ssh -o StrictHostKeyChecking-no ${WORKER_2} 'kubectl set image deployment/production-app-deployment production-app=${DOCKER_IMAGE} --namespace=${K8S_NAMESPACE}'
+                    ssh -o StrictHostKeyChecking-no ${WORKER_2} 'kubectl rollout status deployment/production-app-deployment --namespace=${K8S_NAMESPACE}'
                     """
                 }
             }
