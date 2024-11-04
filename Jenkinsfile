@@ -23,8 +23,11 @@ pipeline {
                     steps {
                         echo 'Building Docker image on Worker 2...'
                         sshagent (credentials: ['jenkins-ssh-key']) {
-                            sh "scp -r /path/to/your/project/website ${WORKER_2}:/home/ubuntu/"
-                            sh "ssh ${WORKER_2} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'"
+                            sh """
+                            ssh-keyscan -H 13.127.235.22 >> ~/.ssh/known_hosts
+                            scp -o StrictHostKeyChecking=no -r /path/to/your/project/website ${WORKER_2}:/home/ubuntu/
+                            ssh -o StrictHostKeyChecking=no ${WORKER_2} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'
+                            """
                         }
                     }
                 }
@@ -32,8 +35,11 @@ pipeline {
                     steps {
                         echo 'Building Docker image on Worker 3...'
                         sshagent (credentials: ['jenkins-ssh-key']) {
-                            sh "scp -r /path/to/your/project/website ${WORKER_3}:/home/ubuntu/"
-                            sh "ssh ${WORKER_3} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'"
+                            sh """
+                            ssh-keyscan -H 13.200.243.170 >> ~/.ssh/known_hosts
+                            scp -o StrictHostKeyChecking=no -r /path/to/your/project/website ${WORKER_3}:/home/ubuntu/
+                            ssh -o StrictHostKeyChecking=no ${WORKER_3} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'
+                            """
                         }
                     }
                 }
@@ -41,8 +47,11 @@ pipeline {
                     steps {
                         echo 'Building Docker image on Worker 4...'
                         sshagent (credentials: ['jenkins-ssh-key']) {
-                            sh "scp -r /path/to/your/project/website ${WORKER_4}:/home/ubuntu/"
-                            sh "ssh ${WORKER_4} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'"
+                            sh """
+                            ssh-keyscan -H 3.109.200.240 >> ~/.ssh/known_hosts
+                            scp -o StrictHostKeyChecking=no -r /path/to/your/project/website ${WORKER_4}:/home/ubuntu/
+                            ssh -o StrictHostKeyChecking=no ${WORKER_4} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'
+                            """
                         }
                     }
                 }
@@ -52,7 +61,7 @@ pipeline {
             steps {
                 echo 'Pushing Docker image from Worker 2...'
                 sshagent (credentials: ['jenkins-ssh-key']) {
-                    sh "ssh ${WORKER_2} 'docker push ${DOCKER_IMAGE}'"
+                    sh "ssh -o StrictHostKeyChecking=no ${WORKER_2} 'docker push ${DOCKER_IMAGE}'"
                 }
             }
         }
@@ -61,10 +70,10 @@ pipeline {
                 echo 'Deploying to Kubernetes from Worker 2...'
                 sshagent (credentials: ['jenkins-ssh-key']) {
                     sh """
-                    ssh ${WORKER_2} 'kubectl apply -f /home/ubuntu/website/deployment.yaml'
-                    ssh ${WORKER_2} 'kubectl apply -f /home/ubuntu/website/service.yaml'
-                    ssh ${WORKER_2} 'kubectl set image deployment/production-app-deployment production-app=${DOCKER_IMAGE} --namespace=${K8S_NAMESPACE}'
-                    ssh ${WORKER_2} 'kubectl rollout status deployment/production-app-deployment --namespace=${K8S_NAMESPACE}'
+                    ssh -o StrictHostKeyChecking=no ${WORKER_2} 'kubectl apply -f /home/ubuntu/website/deployment.yaml'
+                    ssh -o StrictHostKeyChecking=no ${WORKER_2} 'kubectl apply -f /home/ubuntu/website/service.yaml'
+                    ssh -o StrictHostKeyChecking=no ${WORKER_2} 'kubectl set image deployment/production-app-deployment production-app=${DOCKER_IMAGE} --namespace=${K8S_NAMESPACE}'
+                    ssh -o StrictHostKeyChecking=no ${WORKER_2} 'kubectl rollout status deployment/production-app-deployment --namespace=${K8S_NAMESPACE}'
                     """
                 }
             }
