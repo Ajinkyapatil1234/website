@@ -50,8 +50,8 @@ pipeline {
                             chmod 700 ~/.ssh
                             ssh-keyscan -H 13.200.243.170 >> ~/.ssh/known_hosts
                             ssh ${WORKER_3} 'mkdir -p /home/ubuntu/website'
-                            scp -o StrictHostKeyChecking-no -r ${PROJECT_PATH}/* ${WORKER_3}:/home/ubuntu/website/
-                            ssh -o StrictHostKeyChecking-no ${WORKER_3} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'
+                            scp -o StrictHostKeyChecking=no -r ${PROJECT_PATH}/* ${WORKER_3}:/home/ubuntu/website/
+                            ssh -o StrictHostKeyChecking=no ${WORKER_3} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'
                             """
                         }
                     }
@@ -65,8 +65,8 @@ pipeline {
                             chmod 700 ~/.ssh
                             ssh-keyscan -H 3.109.200.240 >> ~/.ssh/known_hosts
                             ssh ${WORKER_4} 'mkdir -p /home/ubuntu/website'
-                            scp -o StrictHostKeyChecking-no -r ${PROJECT_PATH}/* ${WORKER_4}:/home/ubuntu/website/
-                            ssh -o StrictHostKeyChecking-no ${WORKER_4} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'
+                            scp -o StrictHostKeyChecking=no -r ${PROJECT_PATH}/* ${WORKER_4}:/home/ubuntu/website/
+                            ssh -o StrictHostKeyChecking=no ${WORKER_4} 'cd /home/ubuntu/website && docker build -t ${DOCKER_IMAGE} --no-cache .'
                             """
                         }
                     }
@@ -77,7 +77,7 @@ pipeline {
             steps {
                 echo 'Pushing Docker image from Worker 2...'
                 sshagent (credentials: ['jenkins-ssh-key']) {
-                    sh "ssh -o StrictHostKeyChecking-no ${WORKER_2} 'docker push ${DOCKER_IMAGE}'"
+                    sh "ssh -o StrictHostKeyChecking=no ${WORKER_2} 'docker push ${DOCKER_IMAGE}'"
                 }
             }
         }
@@ -86,10 +86,10 @@ pipeline {
                 echo 'Deploying to Kubernetes from Worker 2...'
                 sshagent (credentials: ['jenkins-ssh-key']) {
                     sh """
-                    ssh -o StrictHostKeyChecking-no ${WORKER_2} 'kubectl apply -f /home/ubuntu/website/deployment.yaml'
-                    ssh -o StrictHostKeyChecking-no ${WORKER_2} 'kubectl apply -f /home/ubuntu/website/service.yaml'
-                    ssh -o StrictHostKeyChecking-no ${WORKER_2} 'kubectl set image deployment/production-app-deployment production-app=${DOCKER_IMAGE} --namespace=${K8S_NAMESPACE}'
-                    ssh -o StrictHostKeyChecking-no ${WORKER_2} 'kubectl rollout status deployment/production-app-deployment --namespace=${K8S_NAMESPACE}'
+                    ssh -o StrictHostKeyChecking=no ${WORKER_2} 'kubectl apply -f /home/ubuntu/website/deployment.yaml'
+                    ssh -o StrictHostKeyChecking=no ${WORKER_2} 'kubectl apply -f /home/ubuntu/website/service.yaml'
+                    ssh -o StrictHostKeyChecking=no ${WORKER_2} 'kubectl set image deployment/production-app-deployment production-app=${DOCKER_IMAGE} --namespace=${K8S_NAMESPACE}'
+                    ssh -o StrictHostKeyChecking=no ${WORKER_2} 'kubectl rollout status deployment/production-app-deployment --namespace=${K8S_NAMESPACE}'
                     """
                 }
             }
